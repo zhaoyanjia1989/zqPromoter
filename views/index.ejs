@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  	<meta content="text/html;charset=utf-8" http-equiv="Content-Type"></meta>
+    <title>中青宝手机游戏推广员系统</title>
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="/stylesheets/datepicker3.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/stylesheets/scrolling-nav.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/javascripts/html5shiv.min.js"></script>
+      <script src="/javascripts/respond.min.js"></script>
+    <![endif]-->
+    <link href="/stylesheets/dataTables.bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+    .dataTables_wrapper{
+      color:#fff;
+    }
+    table tbody{
+      color:#000;
+    }
+    </style>
+  </head>
+  <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+      <!-- Navigation -->
+      <nav class="navbar navbar-default navbar-fixed-top"  style="background-color: #318fee;background-image:url(/images/yun.png);background-repeat: no-repeat;" role="navigation">
+          <div class="container-fluid">
+              <div class="navbar-header page-scroll">
+                  <a class="navbar-brand page-scroll" style="padding-top:0px; padding-left:18px;" href="#page-top">
+                  <div>
+                  <img src="/images/logo.png" />
+                  <span style="font-size: 20px;color: white;font-weight: 900;padding-left:10px;">中青宝手机游戏推广员系统</span>
+                  </div>
+                  </a>
+              </div>
+
+
+              <div class="collapse navbar-collapse navbar-ex1-collapse">
+                  <ul class="nav navbar-nav">
+                      <li>
+                          <a class="page-scroll" href="#intro">推广员信息</a>
+                      </li>
+                      <li>
+                          <a class="page-scroll" href="#pass">绑定的账号明细</a>
+                      </li>
+                      <li>
+                          <a class="page-scroll" href="#pay">绑定的账号收入明细</a>
+                      </li>
+                  </ul>
+
+                  <ul class="nav navbar-nav navbar-right" style="color: #fff;background-color: #50a0f0;border: 1px solid #fff;border-radius: 6px; margin-right:20px;">
+                    <li><a href="user/signout"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;退出登录</a></li>
+                  </ul>
+              </div>
+              <!-- /.navbar-collapse -->
+          </div>
+          <!-- /.container -->
+      </nav>
+
+      <!-- Intro Section -->
+      <section id="intro" class="intro-section">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <h1>欢迎推广员：<%=sessionUser.accountname%></h1>
+                      <div class="input-group input-group-lg col-xs-6 col-xs-offset-3" style="padding-top:40px;">
+											  <span class="input-group-addon" id="recommendCode">您的推广码</span>
+											  <input type="text" class="form-control"  aria-describedby="recommendCode" onfocus="this.select()" onmouseover="this.focus()" readonly="readonly" style="cursor: default;"  value="<%=sessionUser.recommendCode%>" id="recommend">
+											</div>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <!-- Pass Section -->
+      <section id="pass" class="pass-section">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <h1>绑定的账号明细</h1>
+
+                      <div class="input-daterange input-group col-xs-6 col-xs-offset-3" id="datepicker" style = "padding-bottom:20px;">
+                          <input type="text" class="input form-control"  name="startdate" id="passstartdate" />
+                          <span class="input-group-addon" style="background-color:#337ab7;color:#eee;text-shadow:none;">&nbsp;&nbsp;至&nbsp;&nbsp;</span>
+                          <input type="text" class="input form-control" name="enddate" id="passenddate" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary" id="querypass">查询</button>
+                            <button type="button" class="btn btn-primary" id="excelpass">导出报表</button>
+                          </span>
+                      </div>
+                      <% if(passinfo==null){ %>
+                      <p>查询绑定账号明细失败。</p>
+                      <%}else{%>
+                      <table class="table table-bordered table-hover">
+												<thead style="background-color: #318fee;">
+													<tr>
+														<th>推广员ID</th>
+														<th>用户名称</th>
+														<th>注册时间</th>
+													</tr>
+												</thead>
+												<tbody style="text-align: left;background-color: #fff;" id="tbodypass">
+												<% for(var i=0;i<passinfo.length;i++){%>
+													<tr>
+														<td><%=passinfo[i].tgPassId%></td>
+														<td><%=passinfo[i].passName%></td>
+														<td><%=passinfo[i].regdate%></td>
+													</tr>
+												<%}%>   
+												</tbody>                 	
+                      </table>
+                      <%}%>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+      <!-- Pay Section -->
+      <section id="pay" class="pay-section">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <h1>绑定的账号收入明细</h1>
+
+                      <div class="input-daterange input-group col-xs-6 col-xs-offset-3" id="datepicker" style = "padding-bottom:20px;">
+                          <input type="text" class="input form-control" name="startdate" id="paystartdate" />
+                          <span class="input-group-addon" style="background-color:#337ab7;color:#eee;text-shadow:none;">&nbsp;&nbsp;至&nbsp;&nbsp;</span>
+                          <input type="text" class="input form-control" name="enddate" id="payenddate" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary" id="querypay">查询</button>
+                            <button type="button" class="btn btn-primary" id="excelpay">导出报表</button>
+                          </span>
+                      </div>
+                      <% if(payinfo==null){ %>
+                      <p>查询绑定账号收入明细失败。</p>
+                      <%}else{%>
+                      <table class="table table-bordered table-hover" style="background-color: #318fee;">
+												<thead >
+													<tr>
+														<th>充值账号</th>
+														<th>充值金额</th>
+														<th>充值时间</th>
+														<th>充值游戏</th>
+													</tr>
+												</thead>
+                        <tfoot>
+                          <tr>
+                            <th colspan="4" style ="background-color: #337ab7;"></th>
+                          </tr>
+                        </tfoot>
+												<tbody style="text-align: left;background-color: #fff;" id="tbodypay">
+												<% for(var i=0;i<payinfo.length;i++){%>
+													<tr>
+														<td><%=payinfo[i].passName%></td>
+														<td><%=payinfo[i].amount%></td>
+														<td><%=payinfo[i].payDate%></td>
+														<td><%=payinfo[i].gameName%></td>
+													</tr>
+												</tbody>
+												<%}%>                      	
+                      </table>
+                      <%}%>
+                  </div>
+              </div>
+          </div>
+      </section>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	  <script src="/bower_components/jquery/jquery.min.js"></script>
+	  <!-- Latest compiled and minified JavaScript -->
+		<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+		<!-- Scrolling Nav JavaScript -->
+    <script src="/javascripts/jquery.easing.min.js"></script>
+    <script src="/javascripts/scrolling-nav.js"></script>
+    <script src="/javascripts/bootstrap-datepicker.js"></script>
+    <script src="/javascripts/bootstrap-datepicker.zh-CN.js"></script>
+    <script src="/javascripts/jquery.dataTables.min.js"></script>
+    <script src="/javascripts/dataTables.bootstrap.js"></script>
+    
+    <script type="text/javascript">
+    var passTableOption = {
+      "oLanguage" : {
+          "sLengthMenu": "每页显示 _MENU_ 条记录",
+          "sZeroRecords": "抱歉， 没有找到",
+          "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+          "sInfoEmpty": "没有数据",
+          "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+          "sZeroRecords": "没有检索到数据",
+          "sProcessing": "正在查找",
+          "sSearch": "查找:",
+          "oPaginate": {
+          "sFirst": "首页",
+          "sPrevious": "前一页",
+          "sNext": "后一页",
+          "sLast": "尾页"
+          }
+      },
+      processing: true,
+      columns: [
+          { data: "tgPassId" },
+          { data: "passName" },
+          { data: "regdate" }
+        ]
+    };
+
+    var payTableOption = {
+      "oLanguage" : {
+          "sLengthMenu": "每页显示 _MENU_ 条记录",
+          "sZeroRecords": "抱歉， 没有找到",
+          "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+          "sInfoEmpty": "没有数据",
+          "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+          "sZeroRecords": "没有检索到数据",
+          "sProcessing": "正在查找",
+          "sSearch": "查找:",
+          "oPaginate": {
+          "sFirst": "首页",
+          "sPrevious": "前一页",
+          "sNext": "后一页",
+          "sLast": "尾页"
+          }
+      },
+      processing: true,
+      columns: [
+          { data: "passName" },
+          { data: "amount" },
+          { data: "payDate" },
+          { data: "gameName" }
+        ],
+      footerCallback: function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+            // Total over all pages
+            total = api
+                .column( 1 )
+                .data()
+                .reduce( function (a, b) {
+                    return parseInt(a)+parseInt(b);
+                },0);
+ 
+            // Total over this page
+            pageTotal = api
+                .column( 1, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return parseInt(a)+parseInt(b);
+                }, 0 );
+ 
+            // Total account number
+            accountTotal = api
+                .column( 0 )
+                .data()
+                .unique()
+                .length;
+
+            // Total account number this page
+            accountpageTotal = api
+                .column( 0, { page: 'current'} )
+                .data()
+                .unique()
+                .length;
+            
+            // Update footer
+            $( api.column( 0 ).footer() ).html(
+                '当前页总金额:'+pageTotal +' ( 总金额:'+ total +')'+'</br>'
+                +'当前页账号数:'+accountpageTotal+' ( 总账号数:' + accountTotal + ')'
+            );
+        }
+      };
+
+    var passDataTable = $('#pass table').DataTable(passTableOption);
+    var payDataTable = $('#pay table').DataTable(payTableOption);
+    $('.input-daterange').datepicker({
+        language: "zh-CN",
+        format: "yyyymmdd",
+        todayHighlight: true,
+        autoClose: true
+    });
+    $('#paystartdate').datepicker('update',new Date(new Date().valueOf()+(-7)*24*60*60*1000));
+    $('#payenddate').datepicker('update',new Date());
+    $('#querypass').click(function(){
+      var startdate = $('#passstartdate').val();
+      var enddate = $('#passenddate').val();
+      passDataTable.ajax.url('query?content=pass&startdate='+startdate+'&enddate='+enddate ).load();
+    });
+
+    $('#querypay').click(function(){
+      var startdate = $('#paystartdate').val();
+      var enddate = $('#payenddate').val();
+      payDataTable.ajax.url('query?content=pay&startdate='+startdate+'&enddate='+enddate ).load();
+    });
+    $('#excelpass').click(function(){
+      var startdate = $('#passstartdate').val();
+      var enddate = $('#passenddate').val();
+      location.href = "excel?content=pass&startdate="+startdate+"&enddate="+enddate;
+    });
+    $('#excelpay').click(function(){
+      var startdate = $('#paystartdate').val();
+      var enddate = $('#payenddate').val();
+      location.href = "excel?content=pay&startdate="+startdate+"&enddate="+enddate;
+    });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type"></meta>
+    <title>中青宝推广员系统</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+      <!-- Bootstrap core CSS -->
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/javascripts/html5shiv.min.js"></script>
+      <script src="/javascripts/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body style="background-color:#eee;">
+  <div class="container">    
+    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+      <div class="panel panel-info" >
+                <div class="panel-heading" style="background-color: #b8eaff">
+                    <img src="/images/logo.png" />
+                    <div style="float:right; font-size: 80%; position: relative;"><a href="http://passport.zqgame.com/pst/resetwords" target="blank">忘记密码?</a></div>
+                </div>     
+
+                <div style="padding-top:30px" class="panel-body" >
+
+                  <div style="display:none;float:none" id="login-alert" class="alert alert-danger col-sm-12" ><%=message%></div>
+                      
+                  <form id="loginform" class="form-horizontal  col-md-10 col-md-offset-1" role="form" action="/user/signin" method="post">
+                                
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input id="login-username" type="text" class="form-control" name="username" value="<%=username%>" placeholder="用户名">                                        
+                    </div>
+                        
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input id="login-password" type="password" class="form-control" name="password" value="<%=password%>" placeholder="密码">
+                    </div>
+
+                      <div class="checkbox " style="padding-left:25px;">
+                        <label>
+                          <input id="login-remember" type="checkbox" name="remember" value="1">自动登陆
+                        </label>
+                      </div>
+
+
+                    <div style="margin-top:10px" class="form-group">
+                        <div class="col-sm-12 text-center">
+                          <input type="submit" id="btn-login" class="btn btn-success" value = '&nbsp登陆&nbsp'>  </input>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-12 control">
+                            <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
+                                没有中青宝通行证？
+                            <a href="/user/regist">
+                                立即注册
+                            </a>
+                            </div>
+                        </div>
+                    </div>    
+                </form>     
+              </div>                     
+          </div>  
+    </div>
+  </div>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="/bower_components/jquery/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(function(){
+      <%if(message){%>
+        $('#login-alert').show();
+      <%}%>
+      $('#loginform').submit(function(){
+        var username = $('input[name="username"]').val();
+        var password = $('input[name="password"]').val();
+        
+        if(password.length < 4||password.length>32){
+          $('#login-alert').text('密码为4-32位字符。').show();
+          return false;
+        }
+        if(/\W+/.test(username)){
+          $('#login-alert').text('用户名只能是数字、字母、下划线。').show();
+          return false;
+        }
+        return true;
+      })
+    });
+  </script>
+  </body>
+</html>
+
+    
+

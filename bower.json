@@ -1,0 +1,11 @@
+{
+  "name": "zqgameStoreWeb",
+  "version": "0.0.0",
+  "homepage": "https://github.com/zhaoyanjia1989/zqgameStoreWeb",
+  "license": "MIT",
+  "private": true,
+  "dependencies":{
+  	"bootstrap":"3.3.1",
+  	"jquery": "1.9.1"
+  }
+}

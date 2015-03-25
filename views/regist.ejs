@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head xmlns="http://www.w3.org/1999/xhtml">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type"></meta>
+    <title>中青宝推广员系统</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+      <!-- Bootstrap core CSS -->
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/javascripts/html5shiv.min.js"></script>
+      <script src="/javascripts/respond.min.js"></script>
+    <![endif]-->
+
+
+
+    
+  </head>
+  <body style="background-color:#eee;">
+    <div class="container">    
+      <div id="signupbox" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        <div class="panel panel-info">
+            <div class="panel-heading" style="background-color: #b8eaff">
+                <img src="/images/logo.png" />
+                <div style="float:right; font-size: 85%; position: relative;"><a id="signinlink" href="/user" >返回登陆</a></div>
+            </div>  
+            <div class="panel-body" >
+                <form id="registform" class="form-horizontal" role="form" action="/user/regist" method="post">
+                    
+                  <div style="display:none;float:none;" id="regist-alert" class="alert alert-danger col-sm-12"><%=message%></div>
+
+                  <div class="form-group">
+                      <label for="username" class="col-md-3 control-label">用户名</label>
+                      <div class="col-md-9">
+                          <input type="text" class="form-control" name="username" placeholder="用户名" value="<%=username%>">
+                      </div>
+                  </div>
+                      
+                  <div class="form-group">
+                      <label for="password" class="col-md-3 control-label">密码</label>
+                      <div class="col-md-9">
+                          <input type="password" class="form-control" name="password" placeholder="密码">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="password2" class="col-md-3 control-label">确认密码</label>
+                      <div class="col-md-9">
+                          <input type="password" class="form-control" name="password2" placeholder="确认密码">
+                      </div>
+                  </div> 
+                  <div class="form-group">
+                      <label for="icode" class="col-md-3 control-label">验证码</label>
+                      <div class="col-md-7">
+                          <input type="text" class="form-control col-md-9" name="captcha" placeholder="">
+                      </div>
+                      <img id="captcha" title="点击刷新"/>
+                  </div>
+
+                  <div class="form-group">
+                      <div class="checkbox col-md-offset-3">
+                        <label>
+                          <input  type="checkbox" name="check"> 我已经阅读并同意<a href="http://passport.zqgame.com/common/agreement.jsp" target="_blank" class="bluelink">《中青宝用户协议》</a>
+                        </label>
+                      </div>
+                  </div>
+                  
+                  <div style="border-top: 1px solid #999; padding-top:20px"  class="form-group">
+                      
+                      <div class="col-sm-12 text-center">
+                          <input id="btn-signup" type="submit" class="btn btn-primary" value="立即注册"></input>
+                      </div>                                           
+                          
+                  </div>
+                </form>
+             </div>
+        </div>
+      </div> 
+    </div>
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/bower_components/jquery/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+      $(function(){
+        <%if(message){%>
+          $('#regist-alert').show();
+        <%}%>
+
+        $('#captcha').click(function(){
+          var timestamp = new Date().getTime();
+          $('#captcha').attr('src','/user/getCaptcha?'+timestamp)
+        });
+        $('#captcha').click();
+        $('#registform').submit(function(){
+          var username = $('input[name="username"]').val();
+          var password = $('input[name="password"]').val();
+          var password2 = $('input[name="password2"]').val();
+          var captcha = $('input[name="captcha"]').val();
+          var check = $('input[name="check"]').is(":checked");
+          console.log("check:"+check);
+          if(!check){
+            $('#regist-alert').text('请阅读并同意协议。').show();
+            return false;
+          }
+          if(password!=password2){
+            $('#regist-alert').text('两次密码不一致。').show();
+            return false;
+          }
+          if(password.length < 4||password.length>32){
+            $('#regist-alert').text('密码为4-32位字符。').show();
+            return false;
+          }
+          if(password==username){
+            $('#regist-alert').text('密码不能与账号相同。').show();
+            return false;
+          }
+          if(captcha.length<4){
+            $('#regist-alert').text('验证码长度错误。').show();
+            return false;
+          }
+          if(username.length < 4||username.length>32){
+            $('#regist-alert').text('用户名为4-32位字符。').show();
+            return false;
+          }
+          if(/\W+/.test(username)){
+            $('#regist-alert').text('用户名只能是数字、字母、下划线。').show();
+            return false;
+          }
+          return true;
+        });
+      });
+    </script>
+
+  </body>
+</html>
+
+    
+

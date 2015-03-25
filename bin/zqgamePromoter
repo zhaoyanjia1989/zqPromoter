@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+var cluster = require('cluster'); 
+var os = require('os'); 
+
+try {
+  require('fs').mkdirSync('./logs');
+} catch (e) {
+  if (e.code != 'EEXIST') {
+    console.error("Could not set up log directory, error was: ", e);
+    process.exit(1);
+  }
+}
+
+/**
+ * Initialise log4js first, so we don't miss any log messages
+ */
+var log4js = require('log4js');
+log4js.configure('./log4js.json');
+
+var log = log4js.getLogger("startup");
+
+// 获取CPU 的数量
+var numCPUs = os.cpus().length; 
+
+var workers = {}; 
+
+if (cluster.isMaster) { 
+	// 主进程分支
+	cluster.on('exit', function (worker) { 
+		// 当一个工作进程结束时，重启工作进程
+		log.error('one worker exit.');
+	}); 
+	// 初始开启与CPU 数量相同的工作进程
+	for (var i = 0; i < numCPUs; i++) { 
+		var worker = cluster.fork(); 
+		workers[worker.pid] = worker; 
+	} 
+} else { 
+	// 工作进程分支，启动服务器
+	var app = require('../app');
+	app.set('port', process.env.PORT || 8060);
+	var server = app.listen(app.get('port'), function() {
+	  log.info('Express server listening on port ' + server.address().port);
+	});
+} 
+
